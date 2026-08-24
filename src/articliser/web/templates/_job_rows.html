@@ -1,0 +1,10 @@
+{% for job in jobs %}
+<tr class="job {{ job.status.value }}">
+  <td>{{ job.kind.value }}</td>
+  <td><span class="badge {{ job.status.value }}">{{ job.status.value }}</span></td>
+  <td><time datetime="{{ job.created_at.isoformat() }}">{{ job.created_at.strftime('%H:%M:%S') }}</time></td>
+  <td class="detail">{{ job.error or (job.payload | tojson) }}</td>
+</tr>
+{% else %}
+<tr><td colspan="4" class="empty">Queue is empty.</td></tr>
+{% endfor %}

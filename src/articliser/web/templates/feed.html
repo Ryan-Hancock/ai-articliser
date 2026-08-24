@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="feed">
+  {% if categories %}
+  <nav class="categories">
+    <a href="/" class="{{ 'active' if not active_category }}">All</a>
+    {% for name, count in categories %}
+      <a href="/?category={{ name|urlencode }}"
+         class="{{ 'active' if active_category == name }}">{{ name }} <span class="count">{{ count }}</span></a>
+    {% endfor %}
+  </nav>
+  {% endif %}
+
+  {% if not articles %}
+    <p class="empty">
+      Nothing published yet.
+      <a href="/submit">Submit a PDF or a link</a> and the worker will pick it up,
+      or run <code>make seed</code> for sample articles.
+    </p>
+  {% endif %}
+
+  {% for article in articles %}
+  <article class="card">
+    {% if article.image_path %}
+      <a href="/article/{{ article.slug }}" class="card-image">
+        <img src="/media/{{ article.image_path }}" alt="" loading="lazy">
+      </a>
+    {% endif %}
+    <div class="card-body">
+      <p class="kicker">{% if article.series_id %}Series &middot; part {{ article.series_index }}{% else %}{{ article.category }}{% endif %}</p>
+      <h2><a href="/article/{{ article.slug }}">{{ article.title }}</a></h2>
+      <p class="standfirst">{{ article.standfirst }}</p>
+      <p class="meta">
+        <time datetime="{{ article.created_at.isoformat() }}">{{ article.created_at.strftime('%d %b %Y') }}</time>
+        &middot; {{ article.reading_minutes }} min read
+      </p>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}

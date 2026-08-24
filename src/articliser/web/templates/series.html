@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ series.title }} &middot; Articliser{% endblock %}
+{% block content %}
+<div class="post">
+  <p class="kicker">Series</p>
+  <h1>{{ series.title }}</h1>
+  <p class="standfirst">
+    {{ parts|length }} of {{ series.total_parts or parts|length }} parts published{% if series.description %} &middot; {{ series.description }}{% endif %}
+  </p>
+
+  {% for chapter, items in chapters %}
+    <section class="series-chapter">
+      {% if chapter and chapter != items[0].series_part %}<h2>{{ chapter }}</h2>{% endif %}
+      <ol class="series-parts">
+        {% for part in items %}
+        <li>
+          <a href="/article/{{ part.slug }}">
+            <span class="part-no">{{ part.series_index }}</span>
+            <span class="part-body">
+              <strong>{{ part.title }}</strong>
+              {% if part.series_part %}<span class="part-source">{{ part.series_part }}</span>{% endif %}
+              <span class="part-meta">{{ part.reading_minutes }} min</span>
+            </span>
+          </a>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+  {% endfor %}
+</div>
+{% endblock %}

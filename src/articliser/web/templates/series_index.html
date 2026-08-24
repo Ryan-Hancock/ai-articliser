@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Series &middot; Articliser{% endblock %}
+{% block content %}
+<div class="feed">
+  <h1>Series</h1>
+  {% if not rows %}
+    <p class="empty">Nothing yet. Run <code>make book SOURCE=path/to/book.pdf</code> to split a book into one.</p>
+  {% endif %}
+  {% for series, parts in rows %}
+    <article class="card">
+      <div class="card-body">
+        <p class="kicker">{{ parts|length }} of {{ series.total_parts or parts|length }} parts</p>
+        <h2><a href="/series/{{ series.slug }}">{{ series.title }}</a></h2>
+        <p class="standfirst">{{ series.description }}</p>
+        <p class="meta">Starts with &ldquo;{{ parts[0].title }}&rdquo;</p>
+      </div>
+    </article>
+  {% endfor %}
+</div>
+{% endblock %}

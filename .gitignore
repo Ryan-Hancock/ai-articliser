@@ -1,0 +1,41 @@
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Runtime data: the SQLite DB, uploaded/fetched PDFs and generated images are
+# all regenerable, and the source PDFs are third-party papers we don't
+# redistribute. config.py recreates the directory tree on import.
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Source material kept alongside the repo for `make book` / `make generate`.
+# Nothing in the pipeline reads a PDF from the repo root, so none belong here.
+*.pdf
+
+# ML artifacts
+*.ckpt
+*.safetensors
+*.bin
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Machine-local Claude Code permissions (contains absolute paths).
+# .claude/settings.json is shared; settings.local.json is not.
+.claude/settings.local.json
+
+# OS / WSL
+.DS_Store
+*:Zone.Identifier

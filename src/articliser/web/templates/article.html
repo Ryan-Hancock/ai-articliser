@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} &middot; Articliser{% endblock %}
+{% block content %}
+<article class="post">
+  {% if series %}
+    <p class="kicker"><a href="/series/{{ series.slug }}">{{ series.title }}</a>
+       &middot; part {{ article.series_index }} of {{ series_total }}</p>
+  {% else %}
+    <p class="kicker">{{ article.category }}</p>
+  {% endif %}
+  <h1>{{ article.title }}</h1>
+  <p class="standfirst">{{ article.standfirst }}</p>
+  <p class="meta">
+    <time datetime="{{ article.created_at.isoformat() }}">{{ article.created_at.strftime('%d %b %Y') }}</time>
+    &middot; {{ article.reading_minutes }} min read
+    {% if article.source and article.source.identifier %}
+      &middot; from <span class="source">{{ article.source.identifier }}</span>
+    {% endif %}
+  </p>
+
+  {% if article.image_path %}
+    <figure class="hero">
+      <img src="/media/{{ article.image_path }}" alt="">
+      {% if article.image_prompt %}<figcaption>{{ article.image_prompt }}</figcaption>{% endif %}
+    </figure>
+  {% endif %}
+
+  {% if has_spans %}
+  <details class="legend" open>
+    <summary>Rhetorical highlighting</summary>
+    <div class="chips">
+      {% for label in labels %}
+        <span class="chip" data-label="{{ label.name }}" title="{{ label.description }}">{{ label.name }}</span>
+      {% endfor %}
+    </div>
+  </details>
+  {% endif %}
+
+  <div class="prose">{{ body_html|safe }}</div>
+
+  {% if article.tags %}
+    <p class="tags">{% for tag in article.tags %}<span class="tag">{{ tag }}</span>{% endfor %}</p>
+  {% endif %}
+</article>
+
+{% if series %}
+<nav class="series-nav">
+  {% if prev_part %}
+    <a class="prev" href="/article/{{ prev_part.slug }}">
+      <span>Previous &middot; part {{ prev_part.series_index }}</span>
+      <strong>{{ prev_part.title }}</strong>
+    </a>
+  {% else %}<span></span>{% endif %}
+  {% if next_part %}
+    <a class="next" href="/article/{{ next_part.slug }}">
+      <span>Next &middot; part {{ next_part.series_index }}</span>
+      <strong>{{ next_part.title }}</strong>
+    </a>
+  {% endif %}
+</nav>
+{% endif %}
+
+{% if related %}
+<aside class="related">
+  <h3>Related</h3>
+  {% for other in related %}
+    <a href="/article/{{ other.slug }}">
+      <span class="kicker">{{ other.category }}</span>
+      <strong>{{ other.title }}</strong>
+    </a>
+  {% endfor %}
+</aside>
+{% endif %}
+{% endblock %}

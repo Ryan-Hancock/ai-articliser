@@ -1,0 +1,50 @@
+[project]
+name = "articliser"
+version = "0.1.0"
+description = "Turns PDFs into readable, illustrated, rhetorically-highlighted articles"
+# Upper bound is not cosmetic: spacy publishes no cp314 wheels (max cp313), and
+# highlighting/chunking.py needs it. Locking on 3.14 fails outright.
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    # Generation runs out-of-process in Ollama, so nothing here loads an LLM.
+    # The transformers<5.13 ceiling that used to sit here was airllm's; it went
+    # when airllm did.
+    "transformers>=5.12",
+    "torch>=2.13",
+    "accelerate>=1.0",
+    # Highlighting (vendored ModernBERT+CRF from semantic-highlighting-slm)
+    "pytorch-crf>=0.7.2",
+    "spacy>=3.8",
+    "sentence-transformers>=5.6",
+    "huggingface-hub>=1.0",
+    # Imagery
+    "diffusers>=0.39",
+    "pillow>=11",
+    # Ingest
+    "pymupdf>=1.28",
+    "httpx>=0.28",
+    # Web + persistence
+    "fastapi>=0.141",
+    "uvicorn[standard]>=0.52",
+    "jinja2>=3.1",
+    "python-multipart>=0.0.20",
+    "sqlmodel>=0.0.39",
+    "markdown-it-py>=4.0",
+    "apscheduler>=3.11",
+    "pydantic>=2.13",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/articliser"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Articliser{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  {# Highlight colours come straight from highlighting/schema.py, so the legend,
+     the marks, and the model's label set can never drift apart. #}
+  <style>
+    {% for label in labels %}
+    mark.hl[data-label="{{ label.name }}"] { background-color: {{ label.color }}33; }
+    .chip[data-label="{{ label.name }}"] { background-color: {{ label.color }}55; }
+    {% endfor %}
+  </style>
+  <script src="/static/htmx.min.js" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="/">Articliser</a>
+    <nav>
+      <form class="search" action="/" method="get">
+        <input type="search" name="q" value="{{ query|default('') }}" placeholder="Search articles" aria-label="Search articles">
+      </form>
+      <a href="/series">Series</a>
+      <a href="/submit">Submit</a>
+      <a href="/jobs">Queue</a>
+    </nav>
+  </header>
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer class="footer">
+    <p>Articles generated locally from source PDFs. Rhetorical highlighting by
+       <code>deberta-v3-zeroshot</code>; imagery by <code>SDXL-Turbo</code>.</p>
+  </footer>
+</body>
+</html>

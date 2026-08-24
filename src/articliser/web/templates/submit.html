@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Submit &middot; Articliser{% endblock %}
+{% block content %}
+<div class="post narrow">
+  <h1>Submit a source</h1>
+  <p class="standfirst">
+    Queued for the offline worker, not generated on this request &mdash; a 32B model
+    streaming layers from disk takes minutes per article. Track progress on the
+    <a href="/jobs">queue</a>.
+  </p>
+
+  <form class="stack" action="/submit/pdf" method="post" enctype="multipart/form-data">
+    <label for="file">Upload a PDF</label>
+    <input id="file" type="file" name="file" accept="application/pdf" required>
+    <button type="submit">Queue PDF</button>
+  </form>
+
+  <form class="stack" action="/submit/url" method="post">
+    <label for="url">Or paste a link</label>
+    <input id="url" type="url" name="url" placeholder="https://arxiv.org/abs/2401.00001" required>
+    <button type="submit">Queue link</button>
+  </form>
+</div>
+{% endblock %}
